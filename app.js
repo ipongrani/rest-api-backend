@@ -53,8 +53,7 @@ app.use(function(req, res, next) {
 
 
 // ROUTE DEFINITIONS-----------------------
-app.use('/', indexRoute);
-app.use('/Api', Api);
+app.use('/care-center', care-center);
 // -----------------------------
 
 
