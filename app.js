@@ -1,11 +1,14 @@
 var createError = require('http-errors');
 var express = require('express');
 const app = express();
+app.disable('x-powered-by');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 let MongoDB = require('mongodb-bluebird');
 let Passport = require('passport');
+
+
 
 
 
@@ -27,6 +30,11 @@ const careCenter = require('./routes/care-center')(express,MongoDB,Passport);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+
+
+
+
+// Use
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
