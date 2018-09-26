@@ -13,9 +13,9 @@ module.exports = (...params) => {
     return db;
   });
   let User = require('../models/care-center/User')(DB);
+  let facility = require('../models/care-center/Facility')(DB);
 
   passport.use(Strategy(DB));
-
 // ----------------------------------------------------------------
 
 
@@ -37,8 +37,13 @@ module.exports = (...params) => {
 
       switch(req.query.action){
 
-        case "new" :
+        case "nM" :
           User.addNew(req, res, next);
+        break;
+
+
+        case "nF" :
+          Facility.addNew(req, res, next);
         break;
 
 
