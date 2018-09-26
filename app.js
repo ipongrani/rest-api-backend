@@ -20,7 +20,7 @@ dotenv.config();
 
 // Route Initializer------------------------------------------
 const indexRoute = require('./routes/index');
-const care-center = require('./routes/Api')(express,MongoDB);
+const care-center = require('./routes/care-center')(express,MongoDB);
 //-------------------------------------------------
 
 
