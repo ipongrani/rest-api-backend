@@ -4,11 +4,11 @@ const app = express();
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-
-
-
 let MongoDB = require('mongodb-bluebird');
+let Passport = require('passport');
+
+
+
 
 
 
@@ -19,7 +19,7 @@ dotenv.config();
 
 
 // Route Initializer------------------------------------------
-const careCenter = require('./routes/care-center')(express,MongoDB);
+const careCenter = require('./routes/care-center')(express,MongoDB,Passport);
 //-------------------------------------------------
 
 
