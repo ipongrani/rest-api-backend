@@ -19,8 +19,7 @@ dotenv.config();
 
 
 // Route Initializer------------------------------------------
-const indexRoute = require('./routes/index');
-const care-center = require('./routes/care-center')(express,MongoDB);
+const careCenter = require('./routes/care-center')(express,MongoDB);
 //-------------------------------------------------
 
 
@@ -53,7 +52,7 @@ app.use(function(req, res, next) {
 
 
 // ROUTE DEFINITIONS-----------------------
-app.use('/care-center', care-center);
+app.use('/care-center', careCenter);
 // -----------------------------
 
 
