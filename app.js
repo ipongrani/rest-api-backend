@@ -7,18 +7,8 @@ var logger = require('morgan');
 
 
 
-//let Promise = require('bluebird');
-//let mongodb = require('mongodb');
-//let MongoClient = mongodb.MongoClient;
-//let Collection = mongodb.Collection;
+
 let MongoDB = require('mongodb-bluebird');
-
-
-
-//Promise.promisifyAll(Collection.prototype);
-//Promise.promisifyAll(MongoClient);
-//const expressMongoDb = Promise.promisifyAll(require('express-mongo-db'));
-
 
 
 
@@ -32,10 +22,6 @@ dotenv.config();
 const indexRoute = require('./routes/index');
 const Api = require('./routes/Api')(express,MongoDB);
 //-------------------------------------------------
-
-
-//DB dbInstance
-//app.use(expressMongoDb(process.env.DB_CON));
 
 
 // view engine setup
