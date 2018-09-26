@@ -13,7 +13,7 @@ module.exports = (...params) => {
     return db;
   });
   let User = require('../models/care-center/User')(DB);
-  let facility = require('../models/care-center/Facility')(DB);
+  let Facility = require('../models/care-center/Facility')(DB);
 
   passport.use(Strategy(DB));
 // ----------------------------------------------------------------
