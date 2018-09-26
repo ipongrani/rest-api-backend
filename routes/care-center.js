@@ -6,7 +6,7 @@ module.exports = (...params) => {
     console.log("DB is UP!");
     return db;
   });
-  let User = require('../models/User')(DB);
+  let User = require('../models/care-center/User')(DB);
 
   // Registration -------------------------------------------------
   Router.route('/Registration')
