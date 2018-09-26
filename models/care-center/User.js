@@ -41,9 +41,11 @@ module.exports = (DB) => {
               email: params[0].body.email
             })
             .then((user) => {
-              if (user) {
+              if (user.length > 0) {
+
                 params[1].status(200).send(user)
               } else {
+                console.log(user);
                 params[1].status(404).send({msg: "Nothing found"})
               }
             })
