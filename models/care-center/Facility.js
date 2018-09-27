@@ -100,11 +100,12 @@ module.exports = (DB) => {
           })
           .then( res => {
             console.log("res: ",res)
-            
+
             if (res === false) {
               return Promise.reject({msg: "Wrong Password"})
             } else {
               let token = jwt.sign(user[0], process.env.SECRET)
+              console.log("token",token)
               params[1].status(200).send({success: true, msg: 'success', id: user[0]._id, token: 'JWT ' + token })
             }
           })
