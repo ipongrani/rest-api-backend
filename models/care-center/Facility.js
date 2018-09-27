@@ -69,7 +69,7 @@ module.exports = (DB) => {
             })
             .then((user) => {
               if (user.length <= 0) {
-                  Promise.reject("Nothing Found")
+                  return Promise.reject({msg: "Nothing Found"})
               } else {
                 //console.log(user);
                 params[1].status(200).send({success: true, data: user})
@@ -77,7 +77,7 @@ module.exports = (DB) => {
             })
             .catch( err => {
               console.log(err)
-              return params[1].status(400).send({msg: err})
+              return params[1].status(400).send(err)
             });
         }
         // ---------------------------------------------------------------------------------------
