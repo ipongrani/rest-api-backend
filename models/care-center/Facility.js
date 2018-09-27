@@ -24,7 +24,7 @@ module.exports = (DB) => {
         })
         .then((user) => {
           if (user.length > 0) {
-            return null
+            return Promise.reject("Reject")
           } else {
             return genSalt(10)
           }
