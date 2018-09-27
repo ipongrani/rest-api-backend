@@ -137,6 +137,10 @@ module.exports = (...params) => {
             }
 
           })
+          .catch( err => {
+            console.log(err)
+            res.status(401).send({success: false, msg: "Something is wrong."});
+          })
 
         })
 

@@ -42,22 +42,30 @@ module.exports = (DB) => {
                     .then(() => params[1].status(200).send({success: true, msg: "Successfully Registered"}))
                     .catch(err => {
                       console.log(err);
-                      return params[1].status(404).send({msg: "Something is wrong!"})
-                    })
+                      return params[1].status(400).send({msg: "Something is wrong!"})
+                    });
                   })
+                  .catch(err => {
+                    console.log(err);
+                    return params[1].status(400).send({msg: "Something is wrong!"})
+                  });
 
                 })
                 .catch(err => {
                   console.log(err);
-                  return params[1].status(401).send({msg: "Something is wrong!"})
-                })
+                  return params[1].status(400).send({msg: "Something is wrong!"})
+                });
 
               }
             })
+            .catch( err => {
+              console.log(err)
+              return params[1].status(400).send({msg: "Something is wrong!"})
+            });
           })
           .catch(err => {
             console.log(err)
-            return params[1].status(404).send({msg: "Something is wrong!"})
+            return params[1].status(400).send({msg: "Something is wrong!"})
           });
         }
         // --------------------------------------------------------------------------------------
@@ -78,10 +86,14 @@ module.exports = (DB) => {
                 params[1].status(404).send({msg: "Nothing found"})
               }
             })
+            .catch( err => {
+              console.log(err)
+              return params[1].status(400).send({msg: "Something is wrong!"})
+            });
           })
           .catch( err => {
             console.log(err)
-            return params[1].status(404).send({msg: "Something is wrong!"})
+            return params[1].status(400).send({msg: "Something is wrong!"})
           });
         }
         // ---------------------------------------------------------------------------------------
@@ -106,15 +118,22 @@ module.exports = (DB) => {
 
                   } else {
 
-                    params[1].status(401).send({msg: 'Nothing Found'});
+                    params[1].status(404).send({msg: 'Nothing Found'});
 
                   }
                 })
+                .catch(err => {
+                  console.log(err)
+                  return params[1].status(400).send({msg: "Something is wrong!"})
+                });
               } else {
-                params[1].status(404).send({msg: 'Something is wrong.'});
+                params[1].status(404).send({msg: 'Nothing Found.'});
               }
-
             })
+            .catch( err => {
+              console.log(err)
+              return params[1].status(400).send({msg: "Something is wrong!"})
+            });
 
           });
         }
