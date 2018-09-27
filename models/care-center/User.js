@@ -10,6 +10,7 @@ module.exports = (DB) => {
   let genSalt = Promise.promisify(bcrypt.genSalt);
   let hash = Promise.promisify(bcrypt.hash);
   let compare = Promise.promisify(bcrypt.compare);
+  let nodemailer = require('nodemailer');
 
 
   return {
@@ -27,7 +28,7 @@ module.exports = (DB) => {
 
                 genSalt(10)
                  .then((salt) => {
-                  
+
 
                   hash(params[0].body.password, salt, null)
                   .then((hashed) => {
@@ -39,7 +40,11 @@ module.exports = (DB) => {
                       password: hashed,
                       status: "Inactive"
                     })
-                    .then(() => params[1].status(200).send({success: true, msg: "Successfully Registered"}))
+                    .then(() => {
+                      let rand = Math.random().toString(36).slice(2)
+                      let smtp = require("../../config/smtpConfig")(rand,nodemailer);
+                      params[1].status(200).send({success: true, msg: "Successfully Registered"})
+                    })
                     .catch(err => {
                       console.log(err);
                       return params[1].status(400).send({msg: "Something is wrong!"})

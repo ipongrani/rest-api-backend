@@ -98,10 +98,10 @@ module.exports = (DB) => {
             }
           })
           .then( res => {
+            
             if (res === false) {
               return Promise.reject({msg: "Wrong Password"})
             } else {
-
               DB.then( db => {
                 let exec = db.collection("FacilityOwners");
                 return exec.find({
