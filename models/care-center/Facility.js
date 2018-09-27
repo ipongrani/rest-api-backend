@@ -91,7 +91,7 @@ module.exports = (DB) => {
             })
           })
           .then((user) => {
-            console.log("user: " user)
+            console.log("user: ", user)
 
             if (user.length <= 0) {
               return Promise.reject({msg: "Nothing Found"})
