@@ -18,8 +18,9 @@ module.exports = (DB) => {
         testMail: (...params) => {
           let rand = Math.random().toString(36).slice(2)
           let smtp = require("../../config/smtpConfig")(rand,nodemailer);
+          let test = smtp.transporter().sendMail;
 
-          let exec = Promise.promisify(smtp.transporter().sendMail);
+          let exec = Promise.promisify(test);
 
           exec(smtp[`mailOptions`]).then(() => {
             console.log("Message sent: ");
@@ -29,7 +30,7 @@ module.exports = (DB) => {
             console.log(error);
             params[1].status(401).send({success: false, msg: 'Something is wrong.'});
           })
-          
+
         },
         addNew: (...params) => {
           DB.then((db) => {
