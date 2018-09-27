@@ -43,12 +43,12 @@ module.exports = (...params) => {
 
 
         case "testMail" :
-          User.addNew(req, res, next);
+          User.testMail(req, res, next);
         break;
 
 
         case "nF" :
-          Facility.testMail(req, res, next);
+          Facility.addNew(req, res, next);
         break;
 
 
