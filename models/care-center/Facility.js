@@ -24,7 +24,7 @@ module.exports = (DB) => {
         })
         .then((user) => {
           if (user.length > 0) {
-            return Promise.reject("Reject")
+            return Promise.reject({msg: "User Exist"})
           } else {
             return genSalt(10)
           }
@@ -35,7 +35,7 @@ module.exports = (DB) => {
         })
         .catch((err) => {
           console.log(err);
-          params[1].status(400).send({msg: "Nothing found"})
+          params[1].status(400).send(err)
         })
       }
 
