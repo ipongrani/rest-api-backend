@@ -77,7 +77,7 @@ module.exports = (DB) => {
             })
             .catch( err => {
               console.log(err)
-              return params[1].status(400).send({msg: "Something is wrong!"})
+              return params[1].status(400).send({msg: err})
             });
         }
         // ---------------------------------------------------------------------------------------
