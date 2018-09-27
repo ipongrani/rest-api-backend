@@ -22,7 +22,7 @@ module.exports = (rand,nodemailer) => {
           }
      }),
     mailOptions: {
-      to : req.body.username,
+      to : "ipongrani@gmail.com",
       subject : "Please confirm your Email account",
       html : messageBox
     }
