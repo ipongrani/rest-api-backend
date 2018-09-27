@@ -31,7 +31,24 @@ module.exports = (DB) => {
         })
         .then((salt) => {
           console.log(salt)
-          params[1].status(200).send(salt)
+          return hash(params[0].body.password, salt, null)
+        })
+        .then((hashed) => {
+
+          DB.then( db => {
+             return db.connect('FacilityOwners');
+          })
+          .then(exec => {
+            exec.insert({
+              name: params[0].body.name,
+              address: params[0].body.address,
+              email: params[0].body.email,
+              password: hashed,
+              status: "Inactive"
+            })
+          })
+          .then(() => params[1].status(200).send({success: true, msg: "Successfully Registered"}))
+          
         })
         .catch((err) => {
           console.log(err);
