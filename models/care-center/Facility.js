@@ -30,6 +30,7 @@ module.exports = (DB) => {
         })
         .then((salt) => {
           console.log(salt)
+          params[1].status(200).send(salt)
         })
         .catch((err) => {
           console.log(err);
