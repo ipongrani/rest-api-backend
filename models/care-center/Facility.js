@@ -24,7 +24,7 @@ module.exports = (DB) => {
         })
         .then((user) => {
           if (user.length > 0) {
-            return DB.reject("Already Registered")
+            return null
           } else {
             return genSalt(10)
           }
