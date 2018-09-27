@@ -36,7 +36,7 @@ module.exports = (DB) => {
         .then((hashed) => {
 
           DB.then( db => {
-             return db.connect('FacilityOwners');
+             return db.collection('FacilityOwners');
           })
           .then(exec => {
             exec.insert({
@@ -48,7 +48,7 @@ module.exports = (DB) => {
             })
           })
           .then(() => params[1].status(200).send({success: true, msg: "Successfully Registered"}))
-          
+
         })
         .catch((err) => {
           console.log(err);
