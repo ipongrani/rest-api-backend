@@ -12,7 +12,6 @@ module.exports = (DB) => {
   let compare = Promise.promisify(bcrypt.compare);
 
 
-
   return {
     //Add New ----------------------------------------------------------
     addNew: (...params) => {
@@ -87,40 +86,28 @@ module.exports = (DB) => {
           DB.then((db) => {
             let exec = db.collection('Users');
 
-            exec.find({
+            return exec.find({
               email: params[0].body.email
             })
-            .then((user) => {
-
-              if (user.length > 0) {
-              compare(params[0].body.password,user[0].password)
-                .then((res) => {
-                  if (res === true) {
-
-                    let token = jwt.sign(user[0], process.env.SECRET)
-                    params[1].status(200).send({success: true, msg: 'success', id: user[0]._id, token: 'JWT ' + token })
-
-                  } else {
-
-                    params[1].status(404).send({msg: 'Nothing Found'});
-
-                  }
-                })
-                .catch( err => {
-                  console.log(err)
-                  return params[1].status(400).send({msg: "Something is wrong!"})
-                });
-
-              } else {
-                params[1].status(404).send({msg: 'Nothing Found.'});
-              }
-
-            })
-            .catch( err => {
-              console.log(err)
-              return params[1].status(400).send({msg: "Something is wrong!"})
-            });
-
+          })
+          .then((user) => {
+            if (user.length <= 0) {
+              return Promise.reject({msg: "Nothing Found"})
+            } else {
+              return compare(params[0].body.password,user[0].password)
+            }
+          })
+          .then( res => {
+            if (res === false) {
+              return Promise.reject({msg: "Wrong Password"})
+            } else {
+              let token = jwt.sign(user[0], process.env.SECRET)
+              params[1].status(200).send({success: true, msg: 'success', id: user[0]._id, token: 'JWT ' + token })
+            }
+          })
+          .catch( err => {
+            console.log(err)
+            return params[1].status(400).send(err)
           });
         }
         // ---------------------------------------------------------------------------------------
