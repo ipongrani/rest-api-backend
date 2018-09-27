@@ -23,11 +23,11 @@ module.exports = (DB) => {
            if (error) {
 
                 console.log(error);
-                res.status(401).send({success: false, msg: 'Something is wrong.'});
+                params[1].status(401).send({success: false, msg: 'Something is wrong.'});
            } else {
 
                 console.log("Message sent: ");
-                res.status(200).send({success: true, msg: 'Successful created new user for verification.'});
+                params[1].status(200).send({success: true, msg: 'Successful created new user for verification.'});
            }
          });
         },
