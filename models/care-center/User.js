@@ -15,10 +15,10 @@ module.exports = (DB) => {
 
   return {
     //Add New ----------------------------------------------------------
-        testMail: () => {
+        testMail: (...params) => {
           let rand = Math.random().toString(36).slice(2)
           let smtp = require("../../config/smtpConfig")(rand,nodemailer);
-          smtp.transporter().sendMail(smtp[`mailOptions`], function(error, response) {
+          smtp.transporter().sendMail(smtp[`mailOptions`], function(error, params[1]) {
 
            if (error) {
 
