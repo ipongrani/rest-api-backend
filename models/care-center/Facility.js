@@ -84,7 +84,7 @@ module.exports = (DB) => {
         // Pass Compare --------------------------------------------------------------------------
         passCompare: (...params) => {
           DB.then((db) => {
-            let exec = db.collection('Users');
+            let exec = db.collection('FacilityOwners');
 
             return exec.find({
               email: params[0].body.email
