@@ -126,7 +126,12 @@ module.exports = (...params) => {
                   switch(req.query.action){
 
                       case 'getInfo' :
-                          User.getInfo(req, res, next)
+                          user.getInfo(req, res, next)
+                      break;
+
+
+                      case 'getInfoF' :
+                          Facility.getInfo(req, res, next)
                       break;
 
 
