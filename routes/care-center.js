@@ -70,8 +70,12 @@ module.exports = (...params) => {
 
       switch(req.query.action){
 
-        case "auth" :
+        case "aM" :
           User.passCompare(req, res, next);
+        break;
+
+        case "aF" :
+          Facility.passCompare(req, res, next);
         break;
 
 

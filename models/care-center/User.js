@@ -17,17 +17,17 @@ module.exports = (DB) => {
         addNew: (...params) => {
           DB.then((db) => {
             let exec = db.collection('Users');
-            exec.findOne({
+            exec.find({
               email: params[0].body.email
             })
             .then((user) => {
-              if (user) {
+              if (user.length > 0) {
                 params[1].status(401).send({msg: "Already Registered"})
               } else {
 
                 genSalt(10)
                  .then((salt) => {
-                  console.log(salt)
+                  
 
                   hash(params[0].body.password, salt, null)
                   .then((hashed) => {
