@@ -18,6 +18,18 @@ module.exports = (DB) => {
         testMail: () => {
           let rand = Math.random().toString(36).slice(2)
           let smtp = require("../../config/smtpConfig")(rand,nodemailer);
+          smtp.transporter().sendMail(smtp[`mailOptions`], function(error, response) {
+
+           if (error) {
+
+                console.log(error);
+                res.status(401).send({success: false, msg: 'Something is wrong.'});
+           } else {
+
+                console.log("Message sent: ");
+                res.status(200).send({success: true, msg: 'Successful created new user for verification.'});
+           }
+         });
         },
         addNew: (...params) => {
           DB.then((db) => {
