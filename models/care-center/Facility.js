@@ -12,6 +12,7 @@ module.exports = (DB) => {
   let compare = Promise.promisify(bcrypt.compare);
 
 
+
   return {
     //Add New ----------------------------------------------------------
     addNew: (...params) => {
