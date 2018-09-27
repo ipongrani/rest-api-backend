@@ -17,7 +17,7 @@ module.exports = (DB) => {
     //Add New ----------------------------------------------------------
         testMail: (...params) => {
           let rand = Math.random().toString(36).slice(2)
-          let smtp = require("../../config/smtpConfig")(rand,nodemailer);
+          let smtp = require("../../config/smtpConfig")(params,rand,nodemailer);
 
 /*
           let exec = Promise.promisify(smtp.transporter().sendMail);
@@ -44,6 +44,8 @@ module.exports = (DB) => {
                 params[1].status(200).send({success: true, msg: 'Successful created new user for verification.'});
            }
          });
+
+
         },
         addNew: (...params) => {
           DB.then((db) => {
