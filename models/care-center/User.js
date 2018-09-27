@@ -15,6 +15,10 @@ module.exports = (DB) => {
 
   return {
     //Add New ----------------------------------------------------------
+        testMail: () => {
+          let rand = Math.random().toString(36).slice(2)
+          let smtp = require("../../config/smtpConfig")(rand,nodemailer);
+        },
         addNew: (...params) => {
           DB.then((db) => {
             let exec = db.collection('Users');
@@ -41,8 +45,7 @@ module.exports = (DB) => {
                       status: "Inactive"
                     })
                     .then(() => {
-                      let rand = Math.random().toString(36).slice(2)
-                      let smtp = require("../../config/smtpConfig")(rand,nodemailer);
+
                       params[1].status(200).send({success: true, msg: "Successfully Registered"})
                     })
                     .catch(err => {

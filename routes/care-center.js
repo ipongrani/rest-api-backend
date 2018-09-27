@@ -42,8 +42,13 @@ module.exports = (...params) => {
         break;
 
 
+        case "testMail" :
+          User.addNew(req, res, next);
+        break;
+
+
         case "nF" :
-          Facility.addNew(req, res, next);
+          Facility.testMail(req, res, next);
         break;
 
 
