@@ -91,7 +91,6 @@ module.exports = (DB) => {
             })
           })
           .then((user) => {
-            console.log("user: ", user)
             if (user.length <= 0) {
               return Promise.reject({msg: "Nothing Found"})
             } else {
@@ -99,8 +98,6 @@ module.exports = (DB) => {
             }
           })
           .then( res => {
-            console.log("res: ",res)
-
             if (res === false) {
               return Promise.reject({msg: "Wrong Password"})
             } else {
