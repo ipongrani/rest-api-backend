@@ -3,13 +3,14 @@
 
 //thid is the commit
 
-module.exports = (DB) => {
-  let bcrypt = require('bcrypt-nodejs');
-  let Promise = require('bluebird');
-  let jwt = require('jsonwebtoken');
-  let genSalt = Promise.promisify(bcrypt.genSalt);
-  let hash = Promise.promisify(bcrypt.hash);
-  let compare = Promise.promisify(bcrypt.compare);
+module.exports = (...params) => {
+  let DB = params[0];
+  let jwt = params[3];
+  let Promise = params[2];
+  let genSalt = Promise.promisify(params[1].genSalt);
+  let hash = Promise.promisify(params[1].hash);
+  let compare = Promise.promisify(params[1].compare);
+  let nodemailer = params[4];
 
 
   return {
@@ -98,7 +99,7 @@ module.exports = (DB) => {
             }
           })
           .then( res => {
-            
+
             if (res === false) {
               return Promise.reject({msg: "Wrong Password"})
             } else {

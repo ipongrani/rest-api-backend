@@ -23,6 +23,7 @@ dotenv.config();
 
 // Route Initializer------------------------------------------
 const careCenter = require('./routes/care-center')(express,MongoDB,Passport);
+const cv = require('./routes/cv')(express,MongoDB,Passport);
 //-------------------------------------------------
 
 
@@ -61,6 +62,7 @@ app.use(function(req, res, next) {
 
 // ROUTE DEFINITIONS-----------------------
 app.use('/care-center', careCenter);
+app.use('/cv', cv);
 // -----------------------------
 
 
