@@ -23,7 +23,7 @@ module.exports = (Config) => {
             return data['res'].status(200).send({hashed: hashed});
 
           } catch (err) {
-            data['res'].status(400).send({msg: "Something is wrong"})
+            data['res'].status(400).send({msg: "Something went wrong. Try Again."})
           }
 
         } else {
@@ -38,6 +38,7 @@ module.exports = (Config) => {
         if (data['req'].body.username.split('').length > 0 && data['req'].body.email.split('').length > 0 ){
 
           let token = Config['jwt'].sign(data['req'].body, process.env.SECRET)
+          
           data['res'].status(200).send({token: 'JWT ' + token })
 
         } else {
@@ -56,6 +57,7 @@ module.exports = (Config) => {
             let db = await Config['Mongo'].connect(data['req'].body.mlab);
             let exec = db.collection(data['req'].body.collection);
 
+            /*
             exec.insert({
                 email: data['req'].body.email,
                 password: data['req'].body.password
@@ -63,9 +65,16 @@ module.exports = (Config) => {
             .then(() => {
               data['res'].status(200).send({msg: "Successfully Registered"})
             })
+            */
+
+            let d = JSON.parse(data['req'].body.data.replace(/^\n+|\n+$/g, ""));
+            exec.insert(d)
+            .then(() => {
+              data['res'].status(200).send({msg: "Successfully Written"})
+            })
 
           } catch (err) {
-            data['res'].status(404).send({msg: "Something went wrong."})
+            data['res'].status(404).send({msg: "Something went wrong. Try again."})
           }
 
         } else {
@@ -91,9 +100,7 @@ module.exports = (Config) => {
           }
 
         } else {
-
             data['res'].status(404).send({data: '', msg: "No DB or Collection Selected"})
-
         }
       }
 
