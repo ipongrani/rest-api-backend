@@ -1,29 +1,32 @@
 
 
-module.exports = (...params) => {
+module.exports = (params) => {
 
   // Initializer --------------------------------------------------
-  let Router  = params[0].Router();
-  let bcrypt = require('bcrypt-nodejs');
-  let Promise = require('bluebird');
-  let jwt = require('jsonwebtoken');
+  let Router  = params['express'].Router();
   let Cast = require('../config/cast');
-  let nodemailer = require('nodemailer');
   let Strategy = require('../config/passport');
-  let passport = params[2];
+  let passport = params['Passport'];
   let getToken = require('../config/tokenExtractor')
-  let Mongo = params[1];
-  let DB =  Mongo.connect(process.env.DB_CON).then((db) => {
+
+  let Config={};
+  Config['bcrypt'] = require('bcrypt-nodejs');
+  Config['Promise'] = require('bluebird');
+  Config['jwt'] = require('jsonwebtoken');
+  Config['nodemailer'] = require('nodemailer');
+  Config['Mongo'] = params['MongoDB'];
+  Config['DB'] = Config['Mongo'].connect(process.env.DB_CON).then((db) => {
     console.log("DB is UP!");
     return db;
   });
 
-  let Utility = require('../models/care-center/Utility')(DB,bcrypt,Promise,jwt,nodemailer,Mongo);
 
-  passport.use(Strategy(DB));
+
+
+  let Utility = require('../models/care-center/Utility')(Config);
+
+  passport.use(Strategy(Config['DB']));
 // ----------------------------------------------------------------
-
-
 
 
 
@@ -41,14 +44,19 @@ Router.route('/Registration')
  .post((req,res,next) => {
     //const DB = req.db
 
+    let data = {};
+    data['req'] = req;
+    data['res'] = res;
+    data['next'] = next;
+
     switch(req.query.action){
 
       case "xtReg" :
-        Utility.addNew(req, res, next);
+        Utility.addNew(data);
       break;
 
       case "xtRet" :
-        Utility.retrieve(req, res, next);
+        Utility.retrieve(data);
       break;
 
 
@@ -77,15 +85,20 @@ Router.route('/Registration')
   // POST ---------------
    .post((req,res,next) => {
       //const DB = req.db
+      let data = {};
+      data['req'] = req;
+      data['res'] = res;
+      data['next'] = next;
+
 
       switch(req.query.action){
 
-        case "enc" :
-          Utility.bcrypt(req, res, next);
+        case "bcrypt" :
+          Utility.bcrypt(data);
         break;
 
         case "jwt" :
-          Utility.jwt(req, res, next);
+          Utility.jwt(data);
         break;
 
 
@@ -136,77 +149,6 @@ Router.route('/Registration')
     //----------------------
 //----------------------------------------------------------------
 
-
-
-
-
-  // authenticated Tasks -------------------------------------------------
-  Router.route('/:id')
-
-  // Passport ----------------------------------------------
-  .all(passport.authenticate('jwt',{session: false}))
-
-  // CAST --------------------------------------------------
-  .all(Cast)
-
-  // POST ---------------
-    .post((req,res,next) => {
-
-      if (req.params.id !== null || req.params.id !== 'undefined') {
-
-        DB.then((db) => {
-
-          let exec = db.collection('Users');
-
-          exec.findOne({
-            _id: req.params.id
-          })
-          .then((user) => {
-
-            if (!user) {
-              res.status(404).json({success: false, msg: 'Authentication failed. User not found.'});
-            } else {
-
-              let token = getToken(req.headers);
-
-              if (token) {
-                  switch(req.query.action){
-
-                      case 'getInfo' :
-                          user.getInfo(req, res, next)
-                      break;
-
-
-                      case 'getInfoF' :
-                          Facility.getInfo(req, res, next)
-                      break;
-
-
-                      default :
-                        res.status(404).send({success: false, msg: "Nothing here."});
-                      break;
-                  }
-                } else {
-                  res.status(404).send({success: false, msg: "Nothing here."});
-                }
-
-            }
-
-          })
-          .catch( err => {
-            console.log(err)
-            res.status(401).send({success: false, msg: "Something is wrong."});
-          })
-
-        })
-
-      } else {
-        res.status(404).send({success: false, msg: "Nothing here."});
-      }
-
-    })
-    //----------------------
-//----------------------------------------------------------------
 
 
   return Router

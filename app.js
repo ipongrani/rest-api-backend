@@ -9,7 +9,11 @@ let MongoDB = require('mongodb-bluebird');
 let Passport = require('passport');
 
 
-
+let routeInit = {
+  express: express,
+  MongoDB: MongoDB,
+  Passport: Passport
+}
 
 
 
@@ -23,7 +27,7 @@ dotenv.config();
 
 // Route Initializer------------------------------------------
 const careCenter = require('./routes/care-center')(express,MongoDB,Passport);
-const cv = require('./routes/cv')(express,MongoDB,Passport);
+const cv = require('./routes/cv')(routeInit);
 //-------------------------------------------------
 
 

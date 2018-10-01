@@ -3,92 +3,99 @@
 
 //thid is the commit
 
-module.exports = (...params) => {
-  let DB = params[0];
-  let jwt = params[3];
-  let Promise = params[2];
-  let genSalt = Promise.promisify(params[1].genSalt);
-  let hash = Promise.promisify(params[1].hash);
-  let compare = Promise.promisify(params[1].compare);
-  let nodemailer = params[4];
-  let Mongo = params[5]
+module.exports = (Config) => {
+
+  let Promise = Config['Promise'];
+  let genSalt = Promise.promisify(Config['bcrypt'].genSalt);
+  let hash = Promise.promisify(Config['bcrypt'].hash);
+
 
 
   return {
-      bcrypt: (...params) => {
-        if (params[0].body.raw.split('').length > 0){
-          console.log("raw", params[0].body.raw);
+      bcrypt: async (data) => {
+        if (data['req'].body.raw.split('').length > 0){
 
-          genSalt(10)
-          .then((salt) => {
-            console.log(salt)
-            return hash(params[0].body.raw, salt, null)
-          })
-          .then(hashed => {
-            params[1].status(200).send({hashed: hashed});
-          })
-          .catch(err => {
-            console.log(err);
-            params[1].status(400).send({msg: "Something is wrong"});
-          })
+          try {
+
+            let salt = await genSalt(10);
+            let hashed = await hash(data['req'].body.raw, salt, null);
+
+            return data['res'].status(200).send({hashed: hashed});
+
+          } catch (err) {
+            data['res'].status(400).send({msg: "Something is wrong"})
+          }
 
         } else {
+
           console.log("nothing to encrypt");
-          params[1].status(404).send({hashed: "Nothing to encrypt"});
+          data['res'].status(404).send({hashed: "Nothing to encrypt"});
+
         }
       }
       ,
-      jwt: (...params) => {
-        if (params[0].body.username.split('').length > 0 && params[0].body.email.split('').length > 0 ){
-          let token = jwt.sign(params[0].body, process.env.SECRET)
-          params[1].status(200).send({token: 'JWT ' + token })
+      jwt: async (data) => {
+        if (data['req'].body.username.split('').length > 0 && data['req'].body.email.split('').length > 0 ){
+
+          let token = Config['jwt'].sign(data['req'].body, process.env.SECRET)
+          data['res'].status(200).send({token: 'JWT ' + token })
+
         } else {
+
           console.log("nothing to encrypt");
-          params[1].status(404).send({token: "Nothing to encrypt"});
+          data['res'].status(404).send({token: "Nothing to encrypt"});
+
         }
       }
       ,
-      addNew: (...params) => {
-        if(params[0].body.mlab.split('').length > 0 && params[0].body.collection.split('').length > 0) {
-          Mongo.connect(params[0].body.mlab)
-          .then( db => {
-            let exec = db.collection(params[0].body.collection);
+      addNew: async (data) => {
+        if(data['req'].body.mlab.split('').length > 0 && data['req'].body.collection.split('').length > 0) {
 
-            return  exec.insert({
-                email: params[0].body.email,
-                password: params[0].body.password
+          try {
+
+            let db = await Config['Mongo'].connect(data['req'].body.mlab);
+            let exec = db.collection(data['req'].body.collection);
+
+            exec.insert({
+                email: data['req'].body.email,
+                password: data['req'].body.password
               })
-          })
-          .then(() => {
-            params[1].status(200).send({msg: "Successfully Registered"})
-          })
-          .catch( err => {
-            params[1].status(400).send({msg: "Somethig is wrong, check if DB and Collection is correct."})
-          })
+            .then(() => {
+              data['res'].status(200).send({msg: "Successfully Registered"})
+            })
+
+          } catch (err) {
+            data['res'].status(404).send({msg: "Something went wrong."})
+          }
+
         } else {
-            params[1].status(404).send({msg: "No DB or Collection Selected"})
+            data['res'].status(404).send({msg: "No DB or Collection Selected"})
         }
       }
       ,
-      retrieve: (...params) => {
-        if(params[0].body.mlab.split('').length > 0 && params[0].body.collection.split('').length > 0) {
-          Mongo.connect(params[0].body.mlab)
-          .then( db => {
-            let exec = db.collection(params[0].body.collection);
+      retrieve: async (data) => {
+        if(data['req'].body.mlab.split('').length > 0 && data['req'].body.collection.split('').length > 0) {
 
-            return  exec.find({
-                [params[0].body.key] : params[0].body.val
+          try {
+
+            let db = await Config['Mongo'].connect(data['req'].body.mlab);
+            let exec = db.collection(data['req'].body.collection);
+            let d = await exec.find({
+                [data['req'].body.key] : data['req'].body.val
               })
-          })
-          .then((data) => {
-            params[1].status(200).send({data: data, msg: "Successful"})
-          })
-          .catch( err => {
-            params[1].status(400).send({data: '', msg: "Somethig is wrong, check if DB and Collection is correct."})
-          })
+
+            data['res'].status(200).send({data: d, msg: "Successful"})
+
+          } catch(err) {
+            data['res'].status(400).send({data: '', msg: "Somethig is wrong, check if DB and Collection is correct."});
+          }
+
         } else {
-            params[1].status(404).send({data: '', msg: "No DB or Collection Selected"})
+
+            data['res'].status(404).send({data: '', msg: "No DB or Collection Selected"})
+
         }
       }
+
     }
   }
