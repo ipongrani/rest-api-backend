@@ -46,18 +46,6 @@ module.exports = (Config) => {
 
             let db = await Config['Mongo'].connect(data['req'].body.mlab);
             let exec = db.collection(data['req'].body.collection);
-        
-            /*
-            exec.insert({
-                email: data['req'].body.email,
-                password: data['req'].body.password
-              })
-            .then(() => {
-              data['res'].status(200).send({msg: "Successfully Registered"})
-            })
-            */
-
-
             let d = JSON.parse(data['req'].body.data.replace(/'^\n+|\n+$'/g, ""));
           
             exec.insert(d)
