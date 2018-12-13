@@ -23,7 +23,7 @@ module.exports = (params) => {
 
 
 
-  let Utility = require('../models/care-center/Utility')(Config);
+  let Utility = require('../models/Utility')(Config);
 
   passport.use(Strategy(Config['DB']));
 // ----------------------------------------------------------------
@@ -84,70 +84,38 @@ Router.route('/Registration')
 
   // POST ---------------
    .post((req,res,next) => {
-      //const DB = req.db
-      let data = {};
-      data['req'] = req;
-      data['res'] = res;
-      data['next'] = next;
+
+        let data = {};
+        data['req'] = req;
+        data['res'] = res;
+        data['next'] = next;
 
 
-      switch(req.query.action){
+        switch(req.query.action){
 
-        case "bcrypt" :
-          Utility.bcrypt(data);
-        break;
+          case "bcrypt" :
+            Utility.bcrypt(data);
+          break;
 
-        case "jwt" :
-          Utility.jwt(data);
-        break;
-
-
-        case "test" :
-          console.log(req.body);
-        break;
+          case "jwt" :
+            Utility.jwt(data);
+          break;
 
 
-        default :
-          res.status(404).send({msg: "Nothing Here!"});
-        break;
-
-      }
-
-     })
-    //----------------------
-//----------------------------------------------------------------
+          case "test" :
+            console.log(req.body);
+          break;
 
 
+          default :
+            res.status(404).send({msg: "Nothing Here!"});
+          break;
 
-
-
-  // Login -------------------------------------------------
-  Router.route('/Login')
-
-  // POST ---------------
-   .post((req,res,next) => {
-      //const DB = req.db
-
-      switch(req.query.action){
-
-        case "aM" :
-          User.passCompare(req, res, next);
-        break;
-
-        case "aF" :
-          Facility.passCompare(req, res, next);
-        break;
-
-
-        default :
-          res.status(404).send({msg: "Nothing Here!"});
-        break;
-
-      }
-
+        }
     })
     //----------------------
 //----------------------------------------------------------------
+
 
 
 

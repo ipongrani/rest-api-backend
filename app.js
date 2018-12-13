@@ -7,6 +7,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 let MongoDB = require('mongodb-bluebird');
 let Passport = require('passport');
+let express_graphql = require('express-graphql');
+let { buildSchema } = require('graphql');
+
+
 
 
 let routeInit = {
@@ -17,8 +21,6 @@ let routeInit = {
 
 
 
-
-
 // DOTENV ---------------------
 const dotenv = require('dotenv');
 dotenv.config();
@@ -26,7 +28,6 @@ dotenv.config();
 
 
 // Route Initializer------------------------------------------
-const careCenter = require('./routes/care-center')(express,MongoDB,Passport);
 const cv = require('./routes/cv')(routeInit);
 //-------------------------------------------------
 
@@ -65,7 +66,6 @@ app.use(function(req, res, next) {
 
 
 // ROUTE DEFINITIONS-----------------------
-app.use('/care-center', careCenter);
 app.use('/cv', cv);
 // -----------------------------
 
@@ -73,7 +73,8 @@ app.use('/cv', cv);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  //next(createError(404));
+  res.status(404).send("<h1>404 Not Found!</h1>");
 });
 
 
