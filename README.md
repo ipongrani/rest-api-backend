@@ -1,7 +1,7 @@
 # rest-api-backend
 
 ## Features:
-- Bcrypt
+- Bcrypt Encryption
 - JWT Encryption
 - MongoDB Write
 - MongoDB Read
