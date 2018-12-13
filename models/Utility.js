@@ -39,13 +39,14 @@ module.exports = (Config) => {
       }
       ,
       addNew: async (data) => {
+
         if(data['req'].body.mlab.split('').length > 0 && data['req'].body.collection.split('').length > 0) {
 
           try {
 
             let db = await Config['Mongo'].connect(data['req'].body.mlab);
             let exec = db.collection(data['req'].body.collection);
-
+        
             /*
             exec.insert({
                 email: data['req'].body.email,
@@ -56,13 +57,16 @@ module.exports = (Config) => {
             })
             */
 
-            let d = JSON.parse(data['req'].body.data.replace(/^\n+|\n+$/g, ""));
+
+            let d = JSON.parse(data['req'].body.data.replace(/'^\n+|\n+$'/g, ""));
+          
             exec.insert(d)
             .then(() => {
               data['res'].status(200).send({msg: "Successfully Written"})
             })
 
           } catch (err) {
+            console.log("err here: ", err)
             data['res'].status(404).send({msg: "Something went wrong. Try again."})
           }
 
